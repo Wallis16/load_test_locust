@@ -20,7 +20,7 @@ jobs:
 
       - name: Build e Push
         run: |
-          IMAGE=wallis16/load_test_fast_api
+          IMAGE=diogeneswallis96/load_test_fast_api
           TAG=${{ github.run_number }}
 
           docker build -f Dockerfile -t $IMAGE:$TAG -t $IMAGE:latest .
