@@ -1,6 +1,6 @@
 services:
   api:
-    image: load_test_fast_api:latest
+    image: load_test_fast_api:0.0.2
     container_name: fastapi_uv_app
     ports:
       - "8000:8000"
