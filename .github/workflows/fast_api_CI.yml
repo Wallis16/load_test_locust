@@ -31,9 +31,9 @@ jobs:
           TAG=${{ github.run_number }}
 
           docker run --rm \
-            -e APP_NAME=test \
-            -e MODEL_PATH=/app/model.pkl \
-            -e DATABASE_URL=sqlite:///./test.db \
+            -e APP_NAME=ML_Inference_API \
+            -e MODEL_PATH=artifacts/_model.joblib \
+            -e DATABASE_URL=postgresql://user:pass@host/db \
             -e RECORD_ON_DB=false \
             $IMAGE:$TAG \
             python -m app.tests.sanity_check
