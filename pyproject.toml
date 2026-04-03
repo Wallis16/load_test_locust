@@ -8,6 +8,7 @@ dependencies = [
     "fastapi>=0.132.0",
     "joblib>=1.5.3",
     "locust>=2.43.3",
+    "pandas>=2.3.3",
     "psycopg2-binary>=2.9.11",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.13.1",

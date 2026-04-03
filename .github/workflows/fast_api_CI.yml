@@ -5,7 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build-and-push:
+  build-test-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,11 +18,31 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build e Push
+      - name: Build image
         run: |
           IMAGE=diogeneswallis96/load_test_fast_api
           TAG=${{ github.run_number }}
 
-          docker build -f Dockerfile -t $IMAGE:$TAG -t $IMAGE:latest .
+          docker build -f Dockerfile -t $IMAGE:$TAG .
+
+      - name: Run model sanity check
+        run: |
+          IMAGE=diogeneswallis96/load_test_fast_api
+          TAG=${{ github.run_number }}
+
+          docker run --rm \
+            -e APP_NAME=test \
+            -e MODEL_PATH=/app/model.pkl \
+            -e DATABASE_URL=sqlite:///./test.db \
+            -e RECORD_ON_DB=false \
+            $IMAGE:$TAG \
+            python -m app.tests.sanity_check
+
+      - name: Push image (only if tests pass)
+        run: |
+          IMAGE=diogeneswallis96/load_test_fast_api
+          TAG=${{ github.run_number }}
+
+          docker tag $IMAGE:$TAG $IMAGE:latest
           docker push $IMAGE:$TAG
           docker push $IMAGE:latest
