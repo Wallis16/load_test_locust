@@ -8,6 +8,10 @@ jobs:
   build-test-push:
     runs-on: ubuntu-latest
 
+    env:
+      IMAGE: diogeneswallis96/load_test_fast_api
+      TAG: ${{ github.run_number }}
+
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
@@ -20,29 +24,21 @@ jobs:
 
       - name: Build image
         run: |
-          IMAGE=diogeneswallis96/load_test_fast_api
-          TAG=${{ github.run_number }}
-
           docker build -f Dockerfile -t $IMAGE:$TAG .
 
       - name: Run model sanity check
         run: |
-          IMAGE=diogeneswallis96/load_test_fast_api
-          TAG=${{ github.run_number }}
-
+          set -e
           docker run --rm \
             -e APP_NAME=ML_Inference_API \
-            -e MODEL_PATH=artifacts/_model.joblib \
-            -e DATABASE_URL=postgresql://user:pass@host/db \
+            -e MODEL_PATH=/app/artifacts/_model.joblib \
+            -e DATABASE_URL=sqlite:///./test.db \
             -e RECORD_ON_DB=false \
             $IMAGE:$TAG \
             python -m app.tests.sanity_check
 
       - name: Push image (only if tests pass)
         run: |
-          IMAGE=diogeneswallis96/load_test_fast_api
-          TAG=${{ github.run_number }}
-
           docker tag $IMAGE:$TAG $IMAGE:latest
           docker push $IMAGE:$TAG
           docker push $IMAGE:latest
