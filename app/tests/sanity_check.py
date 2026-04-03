@@ -9,7 +9,6 @@ def main():
     BASE_DIR = Path(__file__).resolve().parent
     df_test = pd.read_csv(BASE_DIR / "test_set.csv")
 
-    # split features and target
     X_test = df_test.drop(columns=["target"])
     y_test = df_test["target"].astype(int)
 
