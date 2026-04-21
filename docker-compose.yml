@@ -2,8 +2,16 @@ services:
   api:
     image: load_test_fast_api:latest
     container_name: fastapi_uv_app
-    ports:
-      - "8000:8000"
     restart: unless-stopped
     env_file:
       - .env
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api
