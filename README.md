@@ -118,3 +118,8 @@ Ensure PostgreSQL is running before sending prediction requests.
 Environment variables should be configured in a .env file if required.
 
 For production, disable --reload and configure proper logging and security settings.
+
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout certs/key.pem \
+  -out certs/cert.pem

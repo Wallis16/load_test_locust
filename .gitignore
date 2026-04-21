@@ -11,3 +11,6 @@ wheels/
 extra/
 postgresql/.env
 .env
+certs/
+*.pem
+*.key
